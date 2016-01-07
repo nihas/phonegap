@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<meta charset="utf-8" />
+<head>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <title>Expense List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+window.onload= function getYear(){
+var start = 2000;
+var end = new Date().getFullYear();
+var options = "";
+for(var year = start ; year <=end; year++){
+  options += "<option>"+ year +"</option>";
+}
+document.getElementById("year").innerHTML = options;
+};
+</script>
+    <style>
+        @import url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css");
+        @import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
+        *{margin:0; padding:0}
+        .add1{margin:0 auto; width:720px}
+        body{background:#294072; font-family: 'Source Sans Pro', sans-serif}
+        .form{width:400px; margin:0 auto; background:#1C2B4A}
+        .header{height:44px; background:#17233B}
+        .header h2{height:44px; line-height:44px; color:#fff; text-align:center}
+        .login{padding:0 20px}
+        .login span.un{width:10%; text-align:center; color:#0C6; border-radius:3px 0 0 3px}
+        .text,.datee{background:#12192C; width:90%; border-radius:0 3px 3px 0; border:none; outline:none; color:#999; font-family: 'Source Sans Pro', sans-serif}
+        .text,.datee,.login span.un{display:inline-block; vertical-align:top; height:40px; line-height:40px; background:#12192C;}
+
+        .btn{height:40px; border:none; background:#0C6; width:100%; outline:none; font-family: 'Source Sans Pro', sans-serif; font-size:20px; font-weight:bold; color:#eee; border-bottom:solid 3px #093; border-radius:3px; cursor:pointer}
+        ul li{height:40px; margin:15px 0; list-style:none}
+        .span{display:table; width:100%; font-size:14px;}
+        .ch{display:inline-block; width:50%; color:#CCC}
+        .ch a{color:#CCC; text-decoration:none}
+        .ch:nth-child(2){text-align:right}
+        /*social*/
+        .social{height:30px; line-height:30px; display:table; width:100%}
+        .social div{display:inline-block; width:42%; color:#eee; font-size:12px; text-align:center; border-radius:3px}
+        .social div i.fa{font-size:16px; line-height:30px}
+        .fb{background:#3B5A9A; border-bottom:solid 3px #036} .tw{background:#2CA8D2; margin-left:16%; border-bottom:solid 3px #3399CC}
+        /*bottom*/
+        .sign{width:90%; padding:0 5%; height:50px; display:table; background:#17233B}
+        .sign div{display:inline-block; width:50%; line-height:50px; color:#ccc; font-size:14px}
+        .up{text-align:right}
+        .up a{display:block; background:#096; text-align:center; height:35px; line-height:35px; width:50%; font-size:16px; text-decoration:none; color:#eee; border-bottom:solid 3px #006633; border-radius:3px; font-weight:bold; margin-left:50%}
+        @media(max-width:480px){ .form{width:100%}}
+        .links{width:400px; margin:0 auto; height:50px}
+        .links a{display:block; float:left; height:40px; line-height:40px; padding:0 20px; background:#fff; text-decoration:none; margin-left:5px; font-size:16px; font-weight:bold; color:#09F}
+    </style>
+
+    <script src="js/BlockUI.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/DateTimePicker.css" />
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/DateTimePicker.js"></script>
+</head>
+<body>
+<div class="form">
+    <div class="header"><h2>Expense List</h2></div>
+    <div class="login">
+
+        <ul>
+            <li>
+                <span class="un"></span><select id="month" class="text" name="month" placeholder="Month">
+                <option value="hide">-- Month-- </option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select></li>
+            <li><span class="un"></span><select id="year" class="text" name="year">
+                <option value="hide">-- Year --</option>
+                <option value="2010">2010</option>
+                <option value="2011">2011</option>
+                <option value="2012">2012</option>
+                <option value="2013">2013</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+            </select></li>
+            <li><input id="add" type="submit" class="btn" value="Add"></li>
+        </ul>
+
+        <div id="dvTable" class="table-responsive">
+
+        </div>
+    </div>
+
+    <div id="expense" class="table-responsive">
+
+    </div>
+
+
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+		
+			$(document).ready(function()
+			{
+				$("#dtBox").DateTimePicker();
+			});
+		
+		
+		//Expense List
+$(document).ready(function(){
+$("#add").click(function(){
+var month = $("#month").val();
+var year = $("#year").val();
+//var contact = $("#contact").val();
+// Returns successful data submission message when the entered information is stored in database.
+var dataString = 'month='+month+'&year='+ year;
+if(month==''||year=='')
+{
+alert("Please Fill All Fields");
+}
+else {
+// AJAX Code To Submit Form.
+$.ajax({
+type: "POST",
+url: "http://45.55.245.79:81/projects/expensemanager/phonegapapi/api/test/month_expense",
+data: dataString,
+cache: false,
+		
+		
+success: function(result){
+// var results=JSON.stringify(result);
+   res = JSON.parse(result);
+   var status = res.status;
+//Create a HTML Table element.
+if(status=='success'){
+  var table = $("<table id='example'  class='table'/>");
+		//Get the count of columns.
+  var columnCount = getCount(res); //response object size
+		
+  for(i=0;i<getCount(res);i++){
+  var row = $(table[0].insertRow(i));
+  //console.log(res[i].id);
+ var cell1 = $("<td />");
+                cell1.html(res[i].id);
+				row.append(cell1);
+				var cell2 = $("<td />");
+				cell2.html(res[i].date_of_purchase);
+				row.append(cell2);
+				var cell3 = $("<td />");
+				cell3.html(res[i].item);
+				row.append(cell3);
+				var cell4 = $("<td />");
+				cell4.html(res[i].price);
+                row.append(cell4);
+
+ }
+ var customers = new Array();
+		customers.push(["#", "Date", "Item", "Price"]);
+		//Add the header row.
+        var row1 = $(table[0].insertRow(-1));
+		var header1=$("<thead />");
+        for (var i = 0; i < 4; i++) {
+            var headerCell = $("<th />");
+            headerCell.html(customers[0][i]);
+            row1.append(headerCell);
+        }
+		header1.append(row1);
+		table.append(header1);
+ 
+ 
+ var dvTable = $("#dvTable");
+ $('#expense').empty();
+        dvTable.html("");
+        //dvTable.empty();
+        dvTable.append(table);
+		
+		
+		 $('<table class="table"><thead><tr><th>Total Fund:</th><th>'+res.total_fund+'</th></tr><tr><th>Total Expenses:</th><th>'+res.total_expense+'</th></tr></thead></table>').appendTo('#expense');
+}else if(status=='failed'){
+	
+	var dvTable = $("#dvTable");
+        
+        
+        $('#expense').empty();
+        dvTable.html("");
+        dvTable.append(table);
+		
+		
+		 $('<table class="table"><thead><tr><th>'+res.message+'</th></tr></thead></table>').appendTo('#expense');
+
+	
+	
+	
+	
+	
+}	
+		
+	//getCount(res));
+	//location.href="home.html";
+
+}
+});
+}
+return false;
+});
+});
+
+
+function getCount(obj) {
+    var count = 0,
+        prop;
+
+    for (prop in obj) {
+        if (obj.hasOwnProperty(prop) && prop !== "total_fund" && prop !== "total_expense" && prop !== "status") {
+            count += 1;
+        }
+    }
+    return count;
+}
+
+
+		</script>
+
+
+</body>
+</html>
